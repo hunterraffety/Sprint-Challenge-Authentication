@@ -1,7 +1,7 @@
 const axios = require('axios');
 const bcrypt = require('bcryptjs');
 
-const db = require('../database/dbConfig');
+const Users = require('./model');
 
 const { authenticate } = require('../auth/authenticate');
 
@@ -17,11 +17,24 @@ function register(req, res) {
   let user = req.body;
   const hash = bcrypt.hashSync(user.password, 10);
   user.password = hash;
-  res.status(200).json(user.password);
+
+  Users.add(user)
+    .then(newUser => {
+      res.status(201).json(newUser);
+    })
+    .catch(error => {
+      res.status(500).json(error);
+    });
 }
 
 function users(req, res) {
-  return db('users');
+  const users = Users.find()
+    .then(users => {
+      res.status(200).json(users);
+    })
+    .catch(error => {
+      res.status(500).json(error);
+    });
 }
 
 function login(req, res) {
