@@ -7,21 +7,18 @@ const jwtKey =
 
 // quickly see what this file exports
 module.exports = {
-  authenticate,
-  jwtKey
+  authenticate
 };
 
 // implementation details
 function authenticate(req, res, next) {
   const token = req.get('Authorization');
-
+  console.log(token, req.headers);
   if (token) {
     jwt.verify(token, jwtKey, (err, decoded) => {
       if (err) return res.status(401).json(err);
-      else {
-        req.decoded = decoded;
-        next();
-      }
+      req.decoded = decoded;
+      next();
     });
   } else {
     return res.status(401).json({
