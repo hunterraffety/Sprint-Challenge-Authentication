@@ -14,7 +14,7 @@ describe('users model tests', () => {
       expect.arrayContaining(users);
     });
   });
-
+  //
   describe('add()', () => {
     it('should add a user', async () => {
       await Users.add({ username: 'testg22uy', password: 'testpass' });
